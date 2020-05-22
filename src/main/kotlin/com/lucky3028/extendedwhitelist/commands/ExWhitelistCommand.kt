@@ -133,7 +133,7 @@ class ExWhitelistCommand : TabExecutor {
                     }
                 }
             }
-            "removeAll", "remAll", "remall","clearAll", "clearall"-> {
+            "clear"-> {
                 wlPlayers.forEach {it.isWhitelisted = false}
                 sendMsg(sender, "ホワイトリストに登録されたMCIDをすべて削除しました")
             }

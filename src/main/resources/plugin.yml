@@ -4,7 +4,7 @@ main: com.lucky3028.extendedwhitelist.Main
 
 commands:
   exwl:
-    usage: /exwl <help/on/off/reload/list/add/rem/remAll/chk>
+    usage: /exwl <help/on/off/reload/list/add/rem/clear/chk>
     description: This is an exwl command of ExtendedWhitelist. If you need more information, please type "/exwl help".
     default: op
     permission: ExtendedWhitelist.exwl
