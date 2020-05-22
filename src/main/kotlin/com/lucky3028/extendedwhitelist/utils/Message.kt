@@ -1,7 +1,6 @@
 package com.lucky3028.extendedwhitelist.utils
 
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 
 fun logInfo(msg: String) {Bukkit.getLogger().info(msg)}
