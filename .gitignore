@@ -1,0 +1,9 @@
+.gradle/
+.idea/
+build/
+out/
+/bin/
+server*/
+libs*/
+*.iml
+仕様書.md

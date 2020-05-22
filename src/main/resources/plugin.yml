@@ -1,0 +1,11 @@
+name: ExtendedWhitelist
+version: @version@
+main: com.lucky3028.extendedwhitelist.Main
+
+commands:
+  exwl:
+    usage: /exwl <help/on/off/reload/list/add/rem/remAll/chk>
+    description: This is an exwl command of ExtendedWhitelist. If you need more information, please type "/exwl help".
+    default: op
+    permission: ExtendedWhitelist.exwl
+    permission-message: You don't have <permission>.
