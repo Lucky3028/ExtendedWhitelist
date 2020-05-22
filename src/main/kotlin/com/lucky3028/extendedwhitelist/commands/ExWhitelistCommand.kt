@@ -55,7 +55,7 @@ class ExWhitelistCommand : TabExecutor {
                         "指定したMCIDをホワイトリストに追加します。最大で10人を同時に追加できます",
                         "${ChatColor.RED}" + "/exwl [remove/rem] [MCID] [MCID] ... [MCID]",
                         "指定したMCIDをホワイトリストから削除します。最大で10人を同時に削除できます",
-                        "${ChatColor.RED}" + "/exwl [removeAll/remAll/remall/clearAll/clearall]",
+                        "${ChatColor.RED}" + "/exwl clear",
                         "ホワイトリストに登録されたMCIDをすべて削除します",
                         "${ChatColor.RED}" + "/exwl [check/chk] [MCID] [MCID] ... [MCID]",
                         "指定したMCIDがホワイトリストに登録されているか確認します。最大で10人を同時に処理できます"
