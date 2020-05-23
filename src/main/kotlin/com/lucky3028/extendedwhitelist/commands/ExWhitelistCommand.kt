@@ -104,15 +104,13 @@ class ExWhitelistCommand : TabExecutor {
                 }
 
                 specifiedMcids.forEach {
-                    when (val player = getOfflinePlayer(it)) {
-                        null -> {
-                            sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
-                        }
-                        else -> {
-                            player.isWhitelisted = true
-                            sendMsg(sender, "${ChatColor.GREEN}" + "${player.name}をホワイトリストに追加しました")
-                        }
+                    val player = getOfflinePlayer(it) ?: run {
+                        sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
+                        return@forEach
                     }
+
+                    player.isWhitelisted = true
+                    sendMsg(sender, "${ChatColor.GREEN}" + "${player.name}をホワイトリストに追加しました")
                 }
             }
             "remove", "rem" -> {
@@ -122,15 +120,13 @@ class ExWhitelistCommand : TabExecutor {
                 }
 
                 specifiedMcids.forEach {
-                    when (val player = getOfflinePlayer(it)) {
-                        null -> {
-                            sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
-                        }
-                        else -> {
-                            player.isWhitelisted = false
-                            sendMsg(sender, "${ChatColor.GREEN}" + "${player.name}をホワイトリストから削除しました")
-                        }
+                    val player = getOfflinePlayer(it) ?: run {
+                        sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
+                        return@forEach
                     }
+
+                    player.isWhitelisted = false
+                    sendMsg(sender, "${ChatColor.GREEN}" + "${player.name}をホワイトリストから削除しました")
                 }
             }
             "clear"-> {
@@ -145,16 +141,14 @@ class ExWhitelistCommand : TabExecutor {
                 }
 
                 specifiedMcids.forEach {
-                    when (val player = getOfflinePlayer(it)) {
-                        null -> {
-                            sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
-                        }
-                        else -> {
-                            when (player.isWhitelisted) {
-                                true -> sendMsg(sender, "指定されたMCID（${player.name}）はホワイトリストに登録されています")
-                                false -> sendMsg(sender, "指定されたMCID（${player.name}）はホワイトリストに登録されていません")
-                            }
-                        }
+                    val player = getOfflinePlayer(it) ?: run {
+                        sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
+                        return@forEach
+                    }
+
+                    when (player.isWhitelisted) {
+                        true -> sendMsg(sender, "指定されたMCID（${player.name}）はホワイトリストに登録されています")
+                        false -> sendMsg(sender, "指定されたMCID（${player.name}）はホワイトリストに登録されていません")
                     }
                 }
             }
