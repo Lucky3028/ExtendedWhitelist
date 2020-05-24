@@ -103,7 +103,7 @@ class ExWhitelistCommand : TabExecutor {
 
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
-                        sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
+                        sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}）を取得できませんでした")
                         return@forEach
                     }
 
@@ -117,7 +117,7 @@ class ExWhitelistCommand : TabExecutor {
 
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
-                        sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
+                        sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}）を取得できませんでした")
                         return@forEach
                     }
 
@@ -136,9 +136,12 @@ class ExWhitelistCommand : TabExecutor {
 
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
-                        sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
+                        sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}）を取得できませんでした")
                         return@forEach
                     }
+
+                    logInfo(player.uniqueId.toString())
+                    logInfo(player.name)
 
                     when (player.isWhitelisted) {
                         true -> sendMsg(sender, "指定されたMCID（${player.name}）はホワイトリストに登録されています")
@@ -156,30 +159,28 @@ class ExWhitelistCommand : TabExecutor {
     }
 
     /**
-     * checkMcid関数の結果を受け取り、OfflinePlayer型にして返す
+     * mcidExists関数の結果を受け取り、OfflinePlayer型にして返す
      * @param name 確認したいMCID
-     * @return OfflinePlayer? 存在しない場合にnullが代入される
+     * @return OfflinePlayer? 存在しない場合にnullを返す
      */
     private fun getOfflinePlayer(name: String) :OfflinePlayer? {
-        val resCheckMcid = checkMcid(name)
-        if (!resCheckMcid.first) return null
-        return Bukkit.getOfflinePlayer(resCheckMcid.second)
+        val checkedMcid = mcidExists(name) ?: return null
+        return Bukkit.getOfflinePlayer(checkedMcid)
     }
 
     /**
      * MCIDが存在するかを確認し、その真偽値と存在する場合はMCIDを返す。
      * @param name 確認したいMCID
-     * @return Pair<Boolean, String> Boolean：MCIDが存在するか、String:(true->)MCID, (false->)"error"
+     * @return String? 存在するならばUUID.toString、しなければnull
      */
-    private fun checkMcid(name: String): Pair<Boolean, String> {
-        val apiUrl = URL("https://api.mojang.com/users/profiles/minecraft/${name}")
+    private fun mcidExists(name: String): String? {
+        val mojangApiUrl = URL("https://api.mojang.com/users/profiles/minecraft/${name}")
         try {
-            val inp = apiUrl.openStream()
+            val mojangApiStream = mojangApiUrl.openStream()
             //URL先のJSONの内容をStringで取得
-            val reader = inp.readBytes().toString(Charset.defaultCharset())
-            //idとnameに分割
-            val parsedProfile = JSONValue.parseWithException(reader) as JSONObject
-            return Pair(true, parsedProfile["name"].toString())
+            val resMojangApi = mojangApiStream.readBytes().toString(Charset.defaultCharset())
+            val parsedProfile = JSONValue.parseWithException(resMojangApi) as JSONObject
+            return parsedProfile["name"].toString()
         } catch (e: Exception) {
             when (e) {
                 is IOException, is ParseException -> {
@@ -188,7 +189,7 @@ class ExWhitelistCommand : TabExecutor {
                 }
             }
         }
-        return Pair(false, "error")
+        return null
     }
 
     /**
@@ -204,7 +205,6 @@ class ExWhitelistCommand : TabExecutor {
         }
 
         sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
-
         return true
     }
 }
