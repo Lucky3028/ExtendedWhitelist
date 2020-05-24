@@ -8,12 +8,12 @@ import org.bukkit.OfflinePlayer
 import java.io.IOException
 import java.net.URL
 import java.lang.Exception
-import org.apache.commons.io.IOUtils
 import org.bukkit.ChatColor
 import org.bukkit.command.TabExecutor
 import org.json.simple.JSONObject
 import org.json.simple.JSONValue
 import org.json.simple.parser.ParseException
+import java.nio.charset.Charset
 
 @Suppress("Deprecation")
 class ExWhitelistCommand : TabExecutor {
@@ -103,6 +103,8 @@ class ExWhitelistCommand : TabExecutor {
                     return true
                 }
 
+                sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
+
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
                         sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
@@ -118,6 +120,8 @@ class ExWhitelistCommand : TabExecutor {
                     sendMsg(sender, "${ChatColor.RED}" + "MCIDが指定されていません")
                     return true
                 }
+
+                sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
 
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
@@ -140,6 +144,8 @@ class ExWhitelistCommand : TabExecutor {
                     return true
                 }
 
+                sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
+
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
                         sendMsg(sender, "${ChatColor.RED}" + "指定されたMCID（${it}を取得できませんでした")
@@ -151,6 +157,10 @@ class ExWhitelistCommand : TabExecutor {
                         false -> sendMsg(sender, "指定されたMCID（${player.name}）はホワイトリストに登録されていません")
                     }
                 }
+            }
+            else -> {
+                sendMsg(sender, "${ChatColor.RED}" + "適切な引数が指定されていないためコマンドを実行できませんでした")
+                sendMsg(sender, "${ChatColor.RED}" + "引数の詳細については「/exwl help」で確認してください")
             }
         }
 
@@ -174,12 +184,13 @@ class ExWhitelistCommand : TabExecutor {
      * @return Pair<Boolean, String> Boolean：MCIDが存在するか、String:(true->)MCID, (false->)"error"
      */
     private fun checkMcid(name: String): Pair<Boolean, String> {
-        val apiUrl = "https://api.mojang.com/users/profiles/minecraft/${name}"
+        val apiUrl = URL("https://api.mojang.com/users/profiles/minecraft/${name}")
         try {
+            val inp = apiUrl.openStream()
             //URL先のJSONの内容をStringで取得
-            val profile = IOUtils.toString(URL(apiUrl))
+            val reader = inp.readBytes().toString(Charset.defaultCharset())
             //idとnameに分割
-            val parsedProfile = JSONValue.parseWithException(profile) as JSONObject
+            val parsedProfile = JSONValue.parseWithException(reader) as JSONObject
             return Pair(true, parsedProfile["name"].toString())
         } catch (e: Exception) {
             when (e) {
