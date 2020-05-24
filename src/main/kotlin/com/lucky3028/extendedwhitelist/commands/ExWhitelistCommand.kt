@@ -140,9 +140,6 @@ class ExWhitelistCommand : TabExecutor {
                         return@forEach
                     }
 
-                    logInfo(player.uniqueId.toString())
-                    logInfo(player.name)
-
                     when (player.isWhitelisted) {
                         true -> sendMsg(sender, "指定されたMCID（${player.name}）はホワイトリストに登録されています")
                         false -> sendMsg(sender, "指定されたMCID（${player.name}）はホワイトリストに登録されていません")
