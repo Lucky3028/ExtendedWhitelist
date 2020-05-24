@@ -38,7 +38,6 @@ repositories {
 }
 
 dependencies {
-    compile 'commons-io:commons-io:2.6'
     compile "org.spigotmc:spigot-api:$spigot_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     embed "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
