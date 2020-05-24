@@ -191,6 +191,12 @@ class ExWhitelistCommand : TabExecutor {
         return Pair(false, "error")
     }
 
+    /**
+     * MCIDが指定されているか確認する
+     * @param size 確認したい引数の個数
+     * @param sender コマンドの送信者
+     * @return Boolean true->指定されている, false->指定されていない
+     */
     private fun prepairHandlingOfflinePlayer(size: Int, sender: CommandSender): Boolean {
         if (size == 0) {
             sendMsg(sender, "${ChatColor.RED}" + "MCIDが指定されていません")
