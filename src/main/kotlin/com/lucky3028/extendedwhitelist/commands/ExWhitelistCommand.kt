@@ -36,7 +36,7 @@ class ExWhitelistCommand : TabExecutor {
         }
 
         val specifiedMcids = args.filterIndexed { idx, _ -> idx > 0 }.toSet().toList()
-        val speMcidsSize = specifiedMcids.size
+        val specifiedMcidsSize = specifiedMcids.size
         val wlPlayers = Bukkit.getWhitelistedPlayers().toList()
 
         when (args[0]) {
@@ -98,12 +98,8 @@ class ExWhitelistCommand : TabExecutor {
                 sendMsg(sender, wlPlayersNames)
             }
             "add" -> {
-                if (speMcidsSize == 0) {
-                    sendMsg(sender, "${ChatColor.RED}" + "MCIDが指定されていません")
-                    return true
-                }
-
-                sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
+                val mcidIsSpecified = prepairHandlingOfflinePlayer(specifiedMcidsSize, sender)
+                if(!mcidIsSpecified) return true
 
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
@@ -116,12 +112,8 @@ class ExWhitelistCommand : TabExecutor {
                 }
             }
             "remove", "rem" -> {
-                if (speMcidsSize == 0) {
-                    sendMsg(sender, "${ChatColor.RED}" + "MCIDが指定されていません")
-                    return true
-                }
-
-                sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
+                val mcidIsSpecified = prepairHandlingOfflinePlayer(specifiedMcidsSize, sender)
+                if(!mcidIsSpecified) return true
 
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
@@ -139,12 +131,8 @@ class ExWhitelistCommand : TabExecutor {
             }
             //指定されたMCIDがリストの中に存在するか
             "check", "chk" -> {
-                if (speMcidsSize == 0) {
-                    sendMsg(sender, "${ChatColor.RED}" + "MCIDが指定されていません")
-                    return true
-                }
-
-                sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
+                val mcidIsSpecified = prepairHandlingOfflinePlayer(specifiedMcidsSize, sender)
+                if(!mcidIsSpecified) return true
 
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
@@ -201,5 +189,16 @@ class ExWhitelistCommand : TabExecutor {
             }
         }
         return Pair(false, "error")
+    }
+
+    private fun prepairHandlingOfflinePlayer(size: Int, sender: CommandSender): Boolean {
+        if (size == 0) {
+            sendMsg(sender, "${ChatColor.RED}" + "MCIDが指定されていません")
+            return false
+        }
+
+        sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
+
+        return true
     }
 }
