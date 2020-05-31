@@ -35,8 +35,13 @@ class ExWhitelistCommand : TabExecutor {
             return true
         }
 
+        //第2引数以下はMCIDが指定されていることを想定しているので、第2引数及びそれ以降の引数の値を取得する
+        //なお、argsのインデックスは0から始まるので、第2引数はインデックス1。したがって、引数のArrayをインデックス1以降でフィルタしている
+        //.toSet().toList()となっているのは、Setのままだと処理速度が遅いため
+        //TODO: >= 1のときに正常に作動するか？
         val specifiedMcids = args.filterIndexed { idx, _ -> idx > 0 }.toSet().toList()
         val specifiedMcidsSize = specifiedMcids.size
+
         val wlPlayers = Bukkit.getWhitelistedPlayers().toList()
 
         when (args[0]) {
@@ -79,6 +84,7 @@ class ExWhitelistCommand : TabExecutor {
                 logInfo("ホワイトリストを再読み込みしました")
             }
 
+            //ホワイトリストに登録されているプレイヤーを一覧表示する
             "list" -> {
                 val wlSize = wlPlayers.size
 
@@ -162,6 +168,7 @@ class ExWhitelistCommand : TabExecutor {
                 }
             }
 
+            //ホワイトリストに登録されたプレイヤーをすべて削除
             "clear"-> {
                 wlPlayers.forEach {it.isWhitelisted = false}
                 sendMsg(sender, "ホワイトリストに登録されたMCIDをすべて削除しました")
