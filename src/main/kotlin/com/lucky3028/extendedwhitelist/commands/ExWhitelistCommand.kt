@@ -184,7 +184,7 @@ class ExWhitelistCommand : TabExecutor {
     }
 
     /**
-     * mcidExists関数の結果を受け取り、OfflinePlayer型にして返す
+     * mcidExists関数のStringを受け取り、受け取ったStringでOfflinePLayer型を取得して返す。
      * @param name 確認したいMCID
      * @return OfflinePlayer? 存在しない場合にnullを返す
      */
