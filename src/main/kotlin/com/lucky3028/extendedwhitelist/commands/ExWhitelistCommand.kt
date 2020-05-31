@@ -62,6 +62,7 @@ class ExWhitelistCommand : TabExecutor {
                 )
                 helpMsg.forEach {sendMsg(sender, it)}
             }
+
             "on" -> {
                 Bukkit.setWhitelist(true)
                 logInfo("${ChatColor.GREEN}" + "ホワイトリストをオンにしました")
@@ -72,10 +73,12 @@ class ExWhitelistCommand : TabExecutor {
                 logInfo("${ChatColor.GREEN}" + "ホワイトリストをオフにしました")
                 sendMsg(sender, "${ChatColor.GREEN}" + "ホワイトリストをオフにしました")
             }
+
             "reload" -> {
                 Bukkit.reloadWhitelist()
                 logInfo("ホワイトリストを再読み込みしました")
             }
+
             "list" -> {
                 val wlSize = wlPlayers.size
 
@@ -97,9 +100,15 @@ class ExWhitelistCommand : TabExecutor {
                 sendMsg(sender, "ホワイトリストには${wlSize}名のプレイヤーが登録されています：")
                 sendMsg(sender, wlPlayersNames)
             }
+
             "add" -> {
-                val mcidIsSpecified = prepairHandlingOfflinePlayer(specifiedMcidsSize, sender)
-                if(!mcidIsSpecified) return true
+                sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
+
+                //MCIDが引数に指定されていない場合終了
+                if (specifiedMcidsSize == 0) {
+                    sendMsg(sender, "${ChatColor.RED}" + "MCIDが指定されていません")
+                    return false
+                }
 
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
@@ -112,8 +121,13 @@ class ExWhitelistCommand : TabExecutor {
                 }
             }
             "remove", "rem" -> {
-                val mcidIsSpecified = prepairHandlingOfflinePlayer(specifiedMcidsSize, sender)
-                if(!mcidIsSpecified) return true
+                sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
+
+                //MCIDが引数に指定されていない場合終了
+                if (specifiedMcidsSize == 0) {
+                    sendMsg(sender, "${ChatColor.RED}" + "MCIDが指定されていません")
+                    return false
+                }
 
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
@@ -125,14 +139,15 @@ class ExWhitelistCommand : TabExecutor {
                     sendMsg(sender, "${ChatColor.GREEN}" + "${player.name}をホワイトリストから削除しました")
                 }
             }
-            "clear"-> {
-                wlPlayers.forEach {it.isWhitelisted = false}
-                sendMsg(sender, "ホワイトリストに登録されたMCIDをすべて削除しました")
-            }
             //指定されたMCIDがリストの中に存在するか
             "check", "chk" -> {
-                val mcidIsSpecified = prepairHandlingOfflinePlayer(specifiedMcidsSize, sender)
-                if(!mcidIsSpecified) return true
+                sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
+
+                //MCIDが引数に指定されていない場合終了
+                if (specifiedMcidsSize == 0) {
+                    sendMsg(sender, "${ChatColor.RED}" + "MCIDが指定されていません")
+                    return false
+                }
 
                 specifiedMcids.forEach {
                     val player = getOfflinePlayer(it) ?: run {
@@ -146,6 +161,12 @@ class ExWhitelistCommand : TabExecutor {
                     }
                 }
             }
+
+            "clear"-> {
+                wlPlayers.forEach {it.isWhitelisted = false}
+                sendMsg(sender, "ホワイトリストに登録されたMCIDをすべて削除しました")
+            }
+
             else -> {
                 sendMsg(sender, "${ChatColor.RED}" + "適切な引数が指定されていないためコマンドを実行できませんでした")
                 sendMsg(sender, "${ChatColor.RED}" + "引数の詳細については「/exwl help」で確認してください")
@@ -187,21 +208,5 @@ class ExWhitelistCommand : TabExecutor {
             }
         }
         return null
-    }
-
-    /**
-     * MCIDが指定されているか確認する
-     * @param size 確認したい引数の個数
-     * @param sender コマンドの送信者
-     * @return Boolean true->指定されている, false->指定されていない
-     */
-    private fun prepairHandlingOfflinePlayer(size: Int, sender: CommandSender): Boolean {
-        if (size == 0) {
-            sendMsg(sender, "${ChatColor.RED}" + "MCIDが指定されていません")
-            return false
-        }
-
-        sendMsg(sender, "${ChatColor.GREEN}" + "MCIDが有効かどうか確認するために1秒ほど時間がかかります。ご留意ください")
-        return true
     }
 }
