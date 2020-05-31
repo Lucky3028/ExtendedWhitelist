@@ -195,6 +195,7 @@ class ExWhitelistCommand : TabExecutor {
 
     /**
      * MCIDが存在するかを確認し、その真偽値と存在する場合はMCIDを返す。
+     * WARN: MojangのAPIにアクセスしているので、1つのMCIDを確認するのに1秒ほど時間がかかる。
      * @param name 確認したいMCID
      * @return String? 存在するならばUUID.toString、しなければnull
      */
