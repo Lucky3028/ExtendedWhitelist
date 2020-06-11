@@ -24,6 +24,6 @@ Minecraft Java Edtion Spigot 1.12.2 サーバー用です。（他バージョ�
 * /exwl [check/chk] [MCID] [MCID] ... [MCID]
     * 指定したMCIDがホワイトリストに登録されているか確認します。最大で10人を同時に処理できます
 
-##License
+## License
 
 MIT
