@@ -26,4 +26,4 @@ Minecraft Java Edtion Spigot 1.12.2 サーバー用です。（他バージョ�
 
 ## License
 
-MIT
+GNU General Public License v3.0
